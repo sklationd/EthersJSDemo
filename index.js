@@ -1,3 +1,6 @@
+import { ERC20ABI } from "./abi/ERC20.js";
+import { Address } from "./address/address.js";
+
 let provider = null;
 let wallet = null;
 let walletAddress = null;
@@ -23,7 +26,7 @@ const loadWallet = async function () {
   }
 };
 
-const refreshBalance = async function () {
+const refreshETHBalance = async function () {
   if (!provider || !walletAddress) {
     await load();
   }
@@ -32,12 +35,34 @@ const refreshBalance = async function () {
   balanceDiv.innerText = balance / ethers.constants.WeiPerEther + " ETH";
 };
 
+const refreshWETHBalance = async function () {
+  if (!provider || !walletAddress) {
+    await load();
+  }
+
+  const abi = ERC20ABI;
+  const tokenAddress = Address.rinkeby.weth; // TODO check chainId and network name
+  const tokenContract = new ethers.Contract(tokenAddress, abi, provider);
+  const balance = await tokenContract.balanceOf(walletAddress);
+  const balanceDiv = document.getElementById("weth-balance");
+  balanceDiv.innerText = balance / ethers.constants.WeiPerEther + " WETH";
+};
+
 const connectButton = document.getElementById("connect-button");
 connectButton.addEventListener("click", load);
-const refreshBalanceButton = document.getElementById("refresh-balance-button");
-refreshBalanceButton.addEventListener("click", refreshBalance);
+
+const refreshETHBalanceButton = document.getElementById(
+  "refresh-eth-balance-button"
+);
+refreshETHBalanceButton.addEventListener("click", refreshETHBalance);
+
+const refreshWETHBalanceButton = document.getElementById(
+  "refresh-weth-balance-button"
+);
+refreshWETHBalanceButton.addEventListener("click", refreshWETHBalance);
 
 document.addEventListener("DOMContentLoaded", async function () {
   await load();
-  await refreshBalance();
+  await refreshETHBalance();
+  await refreshWETHBalance();
 });
