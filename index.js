@@ -1,28 +1,35 @@
 let provider = null;
-let signer = null;
 let wallet = null;
+let walletAddress = null;
 
 const load = async function () {
-  // METAMASK
+  await loadProvider();
+  await loadWallet();
+};
+
+const loadProvider = async function () {
   if (window.ethereum) {
     provider = new ethers.providers.Web3Provider(window.ethereum);
     await provider.send("eth_requestAccounts", []);
-    signer = provider.getSigner();
-    wallet = await signer.getAddress();
-    console.log("load provider, signer, wallet doen");
   } else {
     alert("Please install metamask");
   }
 };
 
+const loadWallet = async function () {
+  if (provider) {
+    wallet = provider.getSigner();
+    walletAddress = await wallet.getAddress();
+  }
+};
+
 const refreshBalance = async function () {
-  if (!provider || !wallet) {
+  if (!provider || !walletAddress) {
     await load();
   }
-  const balance = await provider.getBalance(wallet);
+  const balance = await provider.getBalance(walletAddress);
   const balanceDiv = document.getElementById("eth-balance");
   balanceDiv.innerText = balance / ethers.constants.WeiPerEther + " ETH";
-  console.log("Refresh Clicked");
 };
 
 const connectButton = document.getElementById("connect-button");
