@@ -26,6 +26,12 @@ const loadWallet = async function () {
   }
 };
 
+const refreshNetworkName = async function () {
+  const network = await provider.getNetwork();
+  const currentNetwork = document.getElementById("current-network");
+  currentNetwork.innerText = "Current Network: " + network.name;
+};
+
 const refreshETHBalance = async function () {
   if (!provider || !walletAddress) {
     await load();
@@ -63,6 +69,7 @@ refreshWETHBalanceButton.addEventListener("click", refreshWETHBalance);
 
 document.addEventListener("DOMContentLoaded", async function () {
   await load();
+  await refreshNetworkName();
   await refreshETHBalance();
   await refreshWETHBalance();
 });
