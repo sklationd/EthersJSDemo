@@ -16,6 +16,7 @@
       src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
       type="application/javascript"
     ></script>
+    <script src="https://unpkg.com/@metamask/detect-provider/dist/detect-provider.min.js"></script>
   </head>
   <body>
     <header>
@@ -29,15 +30,15 @@
     <main>
       <div id="main-view">
         <div class="card-view">
-          <div>Current ETH Balance</div>
-          <p>Your balance</p>
-          <div id="eth-balance">12,341,234$</div>
+          <div class="card-view-title">Current ETH Balance</div>
+          <p class="card-view-description">Your balance</p>
+          <div class="card-view-data" id="eth-balance">12,341,234$</div>
           <button id="refresh-eth-balance-button">Load</button>
         </div>
         <div class="card-view">
-          <div>Current WETH Balance</div>
-          <p>Your balance</p>
-          <div id="weth-balance">12,341,234$</div>
+          <div class="card-view-title">Current WETH Balance</div>
+          <p class="card-view-description">Your balance</p>
+          <div class="card-view-data" id="weth-balance">12,341,234$</div>
           <button id="refresh-weth-balance-button">Load</button>
         </div>
         <!-- <div class="card-view"></div>

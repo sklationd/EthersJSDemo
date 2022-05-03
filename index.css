@@ -23,7 +23,7 @@ body {
 header {
   flex: 0 0 50px;
   border: 1px solid var(--border-color);
-  border-radius: 10px;
+  border-radius: 3px;
   margin: var(--inner-margin);
   padding: var(--outer-padding);
   display: flex;
@@ -34,7 +34,7 @@ header {
 main {
   flex: 1 1 auto;
   border: 1px solid var(--border-color);
-  border-radius: 10px;
+  border-radius: 3px;
   margin: var(--inner-margin);
   padding: var(--outer-padding);
   display: flex;
@@ -45,7 +45,7 @@ main {
 footer {
   flex: 0 0 50px;
   border: 1px solid var(--border-color);
-  border-radius: 10px;
+  border-radius: 3px;
   margin: var(--inner-margin);
   padding: var(--outer-padding);
   display: flex;
@@ -67,10 +67,29 @@ footer {
 
 .card-view {
   border: 1px solid var(--border-color);
-  border-radius: 10px;
+  border-radius: 3px;
   margin: var(--inner-margin);
   padding: var(--outer-padding);
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.card-view-title {
+  font-weight: bold;
+  font-size: 20px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.card-view-description {
+  font-weight: lighter;
+  font-size: 13px;
+  max-width: 300px;
+}
+
+.card-view-data {
+  font-size: 18px;
+  font-style: italic;
+  max-width: 300px;
+  margin: 0 0 10px 0;
 }

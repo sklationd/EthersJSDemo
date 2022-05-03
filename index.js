@@ -1,104 +1,92 @@
 import { ERC20ABI } from "./abi/ERC20.js";
 import { Address } from "./address/address.js";
 
-let provider = null;
-let wallet = null;
-let walletAddress = null;
+const metamaskProvider = await detectEthereumProvider();
 
-const load = async function () {
-  await loadProvider();
-  await loadWallet();
-};
+if (metamaskProvider) {
+  startApp(metamaskProvider); // Initialize your app
+} else {
+  alert("Please install MetaMask!");
+}
 
-const loadProvider = async function () {
-  if (window.ethereum) {
-    provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-    await provider.send("eth_requestAccounts", []);
-  } else {
-    alert("Please install metamask");
+async function startApp(metamaskProvider) {
+  if (metamaskProvider !== window.ethereum) {
+    console.error("Do you have multiple wallets installed?");
   }
-};
 
-const loadWallet = async function () {
-  if (provider) {
-    wallet = provider.getSigner();
-    walletAddress = await wallet.getAddress();
-  }
-};
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
 
-const refreshNetworkName = async function () {
+  ///// GET CURRENT NETWORK /////
   const network = await provider.getNetwork();
+  ethereum.on("chainChanged", handleChainChanged);
+  function handleChainChanged() {
+    window.location.reload();
+  }
+
+  ///// GET CURRENT ACCOUNT /////
+  let accountList = await provider.listAccounts();
+  let currentAccount = accountList.length > 0 ? accountList[0] : null;
+
+  ethereum.on("accountsChanged", handleAccountsChanged);
+
+  async function connect() {
+    try {
+      await provider.send("eth_requestAccounts", []);
+    } catch (e) {
+      console.log("CATCH!");
+      console.error(e);
+    }
+  }
+
+  function handleAccountsChanged(accounts) {
+    if (accounts.length === 0) {
+      // TODO REQUEST: MetaMask is locked or the user has not connected any accounts
+      console.log("Please unlock/connect to MetaMask.");
+    } else if (accounts[0] !== currentAccount) {
+      currentAccount = accounts[0];
+      console.log("Connected to: ", currentAccount);
+      // window.location.reload();
+    }
+    window.location.reload();
+  }
+
+  ///// UPDATE VIEW /////
+
+  // Network Name
   const currentNetwork = document.getElementById("current-network");
   currentNetwork.innerText = "Current Network: " + network.name;
-};
 
-const refreshWalletAddress = async function () {
-  await loadWallet();
+  // Wallet Address
   const currentWalletAddress = document.getElementById(
     "current-wallet-address"
   );
-  currentWalletAddress.innerText = "Current Wallet Address: " + walletAddress;
-};
+  currentWalletAddress.innerText =
+    "Current Wallet Address: " +
+    (currentAccount ? currentAccount : "Not Connected");
 
-const refreshETHBalance = async function () {
-  if (!provider || !walletAddress) {
-    await load();
+  const connectButton = document.getElementById("connect-button");
+  connectButton.addEventListener("click", connect);
+
+  if (currentAccount) {
+    const balance = await provider.getBalance(currentAccount);
+    const balanceDiv = document.getElementById("eth-balance");
+    balanceDiv.innerText =
+      parseFloat(balance / ethers.constants.WeiPerEther).toFixed(4) + " ETH";
+  } else {
+    const balanceDiv = document.getElementById("eth-balance");
+    balanceDiv.innerText = "NOT CONNECTED";
   }
-  const balance = await provider.getBalance(walletAddress);
-  const balanceDiv = document.getElementById("eth-balance");
-  balanceDiv.innerText = balance / ethers.constants.WeiPerEther + " ETH";
-};
 
-const refreshWETHBalance = async function () {
-  if (!provider || !walletAddress) {
-    await load();
+  if (currentAccount && Address[network.name]) {
+    const abi = ERC20ABI;
+    const tokenAddress = Address[network.name].weth; // TODO check chainId and network name
+    const tokenContract = new ethers.Contract(tokenAddress, abi, provider);
+    const balance = await tokenContract.balanceOf(currentAccount);
+    const balanceDiv = document.getElementById("weth-balance");
+    balanceDiv.innerText =
+      parseFloat(balance / ethers.constants.WeiPerEther).toFixed(4) + " WETH";
+  } else {
+    const balanceDiv = document.getElementById("weth-balance");
+    balanceDiv.innerText = "NOT CONNECTED";
   }
-
-  const abi = ERC20ABI;
-  const tokenAddress = Address.rinkeby.weth; // TODO check chainId and network name
-  const tokenContract = new ethers.Contract(tokenAddress, abi, provider);
-  const balance = await tokenContract.balanceOf(walletAddress);
-  const balanceDiv = document.getElementById("weth-balance");
-  balanceDiv.innerText = balance / ethers.constants.WeiPerEther + " WETH";
-};
-
-const connectButton = document.getElementById("connect-button");
-connectButton.addEventListener("click", load);
-
-const refreshETHBalanceButton = document.getElementById(
-  "refresh-eth-balance-button"
-);
-refreshETHBalanceButton.addEventListener("click", refreshETHBalance);
-
-const refreshWETHBalanceButton = document.getElementById(
-  "refresh-weth-balance-button"
-);
-refreshWETHBalanceButton.addEventListener("click", refreshWETHBalance);
-
-const updateEverything = async function () {
-  await load();
-  await refreshNetworkName();
-  await refreshWalletAddress();
-  await refreshETHBalance();
-  await refreshWETHBalance();
-};
-
-document.addEventListener("DOMContentLoaded", async function () {
-  await updateEverything();
-
-  window.ethereum.on("connect", async function (connectInfo) {
-    console.log("connect", connectInfo);
-  });
-
-  window.ethereum.on("disconnect", async function (error) {
-    console.log("disconnect", error);
-  });
-
-  window.ethereum.on("chainChanged", async function (networkId) {
-    await updateEverything();
-  });
-
-  window.ethereum.on("accountsChanged", async function (accounts) {
-    await updateEverything();
-  });
-});
+}
