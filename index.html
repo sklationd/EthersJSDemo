@@ -16,7 +16,6 @@
       src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
       type="application/javascript"
     ></script>
-    <script type="text/javascript" src="./index.js"></script>
   </head>
   <body>
     <header>
@@ -26,10 +25,10 @@
     <main>
       <div id="main-view">
         <div class="card-view">
-          <div>Card Title</div>
-          <p>some description</p>
-          <div>12,341,234$</div>
-          <button>BUTTON</button>
+          <div>Current ETH Balance</div>
+          <p>Your balance</p>
+          <div id="eth-balance">12,341,234$</div>
+          <button id="refresh-balance-button">Load</button>
         </div>
         <!-- <div class="card-view"></div>
         <div class="card-view"></div>
@@ -45,5 +44,6 @@
       </div>
     </main>
     <footer></footer>
+    <script type="text/javascript" src="./index.js"></script>
   </body>
 </html>
