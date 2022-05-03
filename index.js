@@ -12,7 +12,7 @@ const load = async function () {
 
 const loadProvider = async function () {
   if (window.ethereum) {
-    provider = new ethers.providers.Web3Provider(window.ethereum);
+    provider = new ethers.providers.Web3Provider(window.ethereum, "any");
     await provider.send("eth_requestAccounts", []);
   } else {
     alert("Please install metamask");
