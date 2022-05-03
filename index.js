@@ -32,6 +32,14 @@ const refreshNetworkName = async function () {
   currentNetwork.innerText = "Current Network: " + network.name;
 };
 
+const refreshWalletAddress = async function () {
+  await loadWallet();
+  const currentWalletAddress = document.getElementById(
+    "current-wallet-address"
+  );
+  currentWalletAddress.innerText = "Current Wallet Address: " + walletAddress;
+};
+
 const refreshETHBalance = async function () {
   if (!provider || !walletAddress) {
     await load();
@@ -67,9 +75,30 @@ const refreshWETHBalanceButton = document.getElementById(
 );
 refreshWETHBalanceButton.addEventListener("click", refreshWETHBalance);
 
-document.addEventListener("DOMContentLoaded", async function () {
+const updateEverything = async function () {
   await load();
   await refreshNetworkName();
+  await refreshWalletAddress();
   await refreshETHBalance();
   await refreshWETHBalance();
+};
+
+document.addEventListener("DOMContentLoaded", async function () {
+  await updateEverything();
+
+  window.ethereum.on("connect", async function (connectInfo) {
+    console.log("connect", connectInfo);
+  });
+
+  window.ethereum.on("disconnect", async function (error) {
+    console.log("disconnect", error);
+  });
+
+  window.ethereum.on("chainChanged", async function (networkId) {
+    await updateEverything();
+  });
+
+  window.ethereum.on("accountsChanged", async function (accounts) {
+    await updateEverything();
+  });
 });
