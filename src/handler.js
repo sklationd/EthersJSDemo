@@ -1,8 +1,12 @@
 export const registerHandler = function (provider, network, currentAccount) {
-  registerConnectButtonHandler(provider);
+  registerConnectButtonHandler(provider, network, currentAccount);
 };
 
-const registerConnectButtonHandler = function () {
+const registerConnectButtonHandler = function (
+  provider,
+  network,
+  currentAccount
+) {
   const connectButton = document.getElementById("connect-button");
   connectButton.addEventListener("click", async function () {
     try {
