@@ -36,7 +36,6 @@ async function startApp(metamaskProvider) {
     } else if (accounts[0] !== currentAccount) {
       currentAccount = accounts[0];
       console.log("Connected to: ", currentAccount);
-      // window.location.reload();
     }
     window.location.reload();
   }
