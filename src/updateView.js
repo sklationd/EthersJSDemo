@@ -52,7 +52,7 @@ async function updateCurrentETHBalance(provider, currentAccount) {
     const loadButton = document.getElementById("refresh-eth-balance-button");
     if (currentAccount === null) {
       loadButton.disabled = true;
-      connectButton.innerText = "Not Connected";
+      loadButton.innerText = "Not Connected";
     }
     const balanceDiv = document.getElementById("eth-balance");
     balanceDiv.innerText = "Not Connected";
@@ -97,7 +97,7 @@ async function updateCurrentERC20Balance(
     );
     if (currentAccount === null) {
       loadButton.disabled = true;
-      connectButton.innerText = "Not Connected";
+      loadButton.innerText = "Not Connected";
     }
     const balanceDiv = document.getElementById(`${lowerCaseName}-balance`);
     balanceDiv.innerText = "Not Connected";
