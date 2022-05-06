@@ -107,7 +107,6 @@ button:disabled {
   font-weight: lighter;
   font-size: 12px;
   color: var(--sub-text-color);
-
   max-width: 300px;
 }
 
@@ -116,6 +115,34 @@ button:disabled {
   font-style: italic;
   max-width: 300px;
   margin: 0 0 10px 0;
+}
+
+.card-view-grid {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-gap: 15px;
+}
+
+.card-view-grid-item-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-view-grid-item-attribute {
+  display: flex;
+  flex-direction: row;
+}
+
+.card-view-grid-item {
+  border: 1px solid var(--border-color);
+  border-radius: 3px;
+  margin: var(--inner-margin);
+  padding: var(--outer-padding);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 #header-title {

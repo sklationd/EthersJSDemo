@@ -5,6 +5,7 @@ export const registerHandler = function (provider, network, currentAccount) {
   registerETHRefreshHandler(provider, currentAccount);
   registerERC20RefreshHandler(provider, network, currentAccount, "WETH");
   registerERC20RefreshHandler(provider, network, currentAccount, "FAU");
+  registerERC721RefreshHandler("soc");
 };
 
 const registerConnectButtonHandler = function (provider) {
@@ -67,5 +68,15 @@ const registerERC20RefreshHandler = function (
     balanceDiv.innerText = `${parseFloat(
       balance / ethers.constants.WeiPerEther
     ).toFixed(4)} ${upperCaseName}`;
+  });
+};
+
+const registerERC721RefreshHandler = function (ERC721Name) {
+  let lowerCaseName = ERC721Name.toLowerCase();
+  const loadButton = document.getElementById(
+    `refresh-${lowerCaseName}-balance-button`
+  );
+  loadButton.addEventListener("click", async function () {
+    window.location.reload();
   });
 };
