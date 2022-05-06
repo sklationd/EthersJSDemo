@@ -24,10 +24,10 @@
   - [ ] ERC-20 Approve
   - [ ] ERC-20 Transfer
   - [x] 보유 토큰 확인
-- [ ] ERC-721 관련 기능
-  - [ ] 보유한 ERC-721 리스트 업
+- [x] ERC-721 관련 기능
+  - [x] 보유한 ERC-721 리스트 업
 - [ ] UI/UX 개선
-  - [ ] React + Material UI로 마이그레이션
+  - [ ] **React + Material UI로 마이그레이션**
   - [ ] 버튼 누르면 로딩하는거 보여주기
   - [ ] navigation 추가
 - [ ] ENS를 이용해서 컨트랙트 불러오기?
@@ -40,3 +40,8 @@
 - [MetaMask Docs](https://docs.metamask.io/guide)
 - [MetaMask Detect Provider](https://github.com/MetaMask/detect-provider)
 - [ENS](https://ens.domains/ko/)
+- [Pinata](https://docs.pinata.cloud/)
+- [IPFS](https://ipfs.io/)
+- [ERC-721](https://docs.openzeppelin.com/contracts/4.x/api/token/erc721)
+- [ERC-20](https://docs.openzeppelin.com/contracts/4.x/api/token/erc20)
+- [OpenZeppelin Wizard](https://wizard.openzeppelin.com/)
